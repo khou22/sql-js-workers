@@ -1,14 +1,27 @@
 import { expose } from "comlink";
 
+interface InternalState {
+  id?: string;
+}
+
+let state: InternalState = {
+  id: undefined,
+};
+
+const init = (id: string) => {
+  state.id = id;
+};
+
 const handleStart = () => {
-  console.log("[Writer] Starting");
+  console.log(`[Writer ${state.id}] Starting`);
 };
 
 const handleStop = () => {
-  console.log("[Writer] Stopping");
+  console.log(`[Writer ${state.id}] Stopping`);
 };
 
 const api = {
+  init,
   start: handleStart,
   stop: handleStop,
 };
