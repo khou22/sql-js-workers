@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import WriterStatus from "./components/writer-status";
-import { databaseOperator } from "./db";
+import { mainDatabaseOperator } from "./db/mainOperator";
 
 function App() {
   const handleHealth = useCallback(async () => {
-    const isHealthy = await databaseOperator.checkHealth();
+    const isHealthy = await mainDatabaseOperator.checkHealth();
     if (isHealthy) {
       console.log("Healthy DB thread");
     } else {
@@ -12,9 +12,14 @@ function App() {
     }
   }, []);
 
+  const handleAddRows = useCallback(async () => {
+    mainDatabaseOperator.writeRows(100);
+  }, []);
+
   return (
     <div className="App">
       <button onClick={handleHealth}>Check Health</button>
+      <button onClick={handleAddRows}>Main Thread Add Rows</button>
       <WriterStatus />
       <WriterStatus />
     </div>

@@ -1,24 +1,32 @@
-import { proxy, Remote, wrap } from "comlink";
+import { proxy, Remote, transfer, wrap } from "comlink";
 import SqlDatabaseWorker, {
   SqlDatabaseWorkerAPI,
 } from "../workers/sql/index.shared-worker";
 
-const worker: SharedWorker = new SqlDatabaseWorker();
-
-class DatabaseOperator {
+export class DatabaseOperator {
+  port?: MessagePort;
   workerAPI: Remote<SqlDatabaseWorkerAPI>;
-  constructor() {
-    this.workerAPI = wrap(worker.port);
+
+  constructor(port: MessagePort) {
+    this.port = port;
+    this.workerAPI = wrap(port);
   }
 
+  static newWorker = (): DatabaseOperator => {
+    const worker: SharedWorker = new SqlDatabaseWorker();
+    return new DatabaseOperator(worker.port);
+  };
+
   checkHealth = () => this.workerAPI.health();
+
+  bindWriter = (id: string, port: MessagePort) => {
+    this.workerAPI.bindWriter(id, transfer(port, [port]));
+  };
 
   writeRows = (numRows: number) => {
     this.workerAPI.writeRows(
       numRows,
-      proxy(() => console.log("Successfully wrote", numRows))
+      proxy((totalRows) => console.log("Total rows", totalRows))
     );
   };
 }
-
-export const databaseOperator = new DatabaseOperator();
