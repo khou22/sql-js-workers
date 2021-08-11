@@ -18,7 +18,9 @@ export const useWriter = () => {
     workerInstance.current = new WriterWorker();
     workerAPI.current = wrap(workerInstance.current);
 
-    // Create two way channel.
+    /**
+     * Setup the two way channel to allow communication between the SharedWorker DB <> Writer dedicated workers.
+     */
     const channel = new MessageChannel();
 
     // Send the Writers port1 to allow them to send data to DB.

@@ -17,10 +17,17 @@ const handleWriteRows = (
 
 const bindWriter = (writerID: string, port: MessagePort) => {
   console.log(`[DB] Binding writer ${writerID}`);
-  port.onmessage = (e: MessageEvent) => {
-    console.log("[DB] onmessage handler");
-    console.log(e);
-  };
+
+  /**
+   * Optionally intercept messages manually, but this requires a manual port.start()
+   */
+  // port.onmessage = (e: MessageEvent) => {
+  //   console.log("[DB] onmessage handler", e);
+  // };
+  // port.start();
+
+  // Expose the SharedWorker on the port by binding the API to all ports that Writer's are publishing to.
+  expose(api, port);
 };
 
 const api = {

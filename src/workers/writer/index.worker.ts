@@ -5,6 +5,7 @@ interface InternalState {
   id?: string;
   dbWorkerPort?: MessagePort;
   currentTimer?: NodeJS.Timeout;
+  dbOperator?: DatabaseOperator;
 }
 
 let state: InternalState = {
@@ -15,23 +16,21 @@ let state: InternalState = {
 const init = (id: string, dbWorkerPort: MessagePort) => {
   state.id = id;
   state.dbWorkerPort = dbWorkerPort;
+
+  state.dbOperator = new DatabaseOperator(state.dbWorkerPort);
 };
 
 const handleStart = () => {
   console.log(`[Writer ${state.id}] Starting`);
 
   state.currentTimer = setInterval(async () => {
-    if (!state.dbWorkerPort) {
-      console.log(`[Writer ${state.id}] DB Port Not Defined!`);
+    if (!state.dbOperator) {
+      console.log(`[Writer ${state.id}] DB Operator!`);
       return;
     }
 
-    console.log("Creating db operator from port", state.dbWorkerPort);
-    const db = new DatabaseOperator(state.dbWorkerPort);
-    const isHealthy = await db.checkHealth();
-    console.log("healthy", isHealthy);
-    db.writeRows(5);
-  }, 3000);
+    state.dbOperator?.writeRows(5);
+  }, 1000);
 };
 
 const handleStop = () => {
