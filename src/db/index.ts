@@ -1,7 +1,7 @@
 import { proxy, Remote, wrap } from "comlink";
 import SqlDatabaseWorker, {
   SqlDatabaseWorkerAPI,
-} from "../workers/sql/index.worker";
+} from "../workers/sql/index.shared-worker";
 
 const worker: SharedWorker = new SqlDatabaseWorker();
 

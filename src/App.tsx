@@ -3,7 +3,7 @@ import { databaseOperator } from "./db";
 
 function App() {
   const handleHealth = useCallback(async () => {
-    const isHealthy = databaseOperator.checkHealth();
+    const isHealthy = await databaseOperator.checkHealth();
     console.log(isHealthy);
   }, []);
 
