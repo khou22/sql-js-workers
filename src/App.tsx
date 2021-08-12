@@ -3,6 +3,8 @@ import { SqlQueryEditor } from "./components/query-editor";
 import { StopWatch } from "./components/stopwatch";
 import WriterStatus from "./components/writer-status";
 import { mainDatabaseOperator } from "./db/mainOperator";
+import "./index.css";
+import { generateMockRowData } from "./utils/mock";
 
 const App = () => {
   const handleHealth = useCallback(async () => {
@@ -15,7 +17,8 @@ const App = () => {
   }, []);
 
   const handleAddRows = useCallback(async (n: number) => {
-    mainDatabaseOperator.writeRows(n);
+    const mockData = generateMockRowData(n);
+    mainDatabaseOperator.writeRows(mockData);
   }, []);
 
   return (

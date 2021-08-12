@@ -3,6 +3,7 @@ import { QueryExecResult } from "sql.js";
 import SqlDatabaseWorker, {
   SqlDatabaseWorkerAPI,
 } from "../workers/sql/index.shared-worker";
+import { RowData } from "../workers/sql/types";
 
 export class DatabaseOperator {
   port?: MessagePort;
@@ -24,9 +25,9 @@ export class DatabaseOperator {
     this.workerAPI.bindWriter(id, transfer(port, [port]));
   };
 
-  writeRows = (numRows: number) => {
+  writeRows = (rows: RowData[]) => {
     this.workerAPI.writeRows(
-      numRows,
+      rows,
       proxy((totalRows) => console.log("Total rows", totalRows))
     );
   };

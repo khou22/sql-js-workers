@@ -1,5 +1,6 @@
 import { expose } from "comlink";
 import { DatabaseOperator } from "../../db";
+import { generateMockRowData } from "../../utils/mock";
 
 const DEFAULT_WRITE_SIZE = 100;
 const DEFAULT_INTERVAL_TIMER = 1000;
@@ -32,7 +33,9 @@ const handleStart = (numMessages?: number, interval?: number) => {
       return;
     }
 
-    state.dbOperator?.writeRows(numMessages || DEFAULT_WRITE_SIZE);
+    const mockData = generateMockRowData(numMessages || DEFAULT_WRITE_SIZE);
+
+    state.dbOperator?.writeRows(mockData);
   }, interval || DEFAULT_INTERVAL_TIMER);
 };
 

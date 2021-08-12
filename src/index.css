@@ -1,0 +1,4 @@
+.query-results-column {
+    max-width: 220px;
+    overflow: auto;
+}

@@ -17,23 +17,12 @@ let totalRows = 0;
 const handleHealth = (): boolean => true;
 
 const handleWriteRows = (
-  numRows: number,
+  rows: RowData[],
   onSuccess: (totalRows: number) => void
 ) => {
-  console.log("[Writer] Writing", numRows);
-
-  const mockData: RowData[] = [];
-  for (let i = 0; i < numRows; i++) {
-    mockData.push({
-      id: `row-${totalRows + i}`,
-      timestamp: performance.now(),
-      name: `some-name-${i}`,
-      payload: 0x01ff,
-    });
-  }
-  sqlOperator.insertRows(mockData);
-
-  totalRows += numRows;
+  console.log("[Writer] Writing", rows.length);
+  sqlOperator.insertRows(rows);
+  totalRows += rows.length;
   onSuccess(totalRows);
 };
 

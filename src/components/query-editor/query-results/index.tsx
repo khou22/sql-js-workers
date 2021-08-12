@@ -16,9 +16,17 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
     const clippedValues = values.slice(0, 100);
     return clippedValues.map((row, i) => (
       <tr key={i}>
-        {row?.map((value, i) => (
-          <td key={i}>{value}</td>
-        ))}
+        {row?.map((value, i) => {
+          let str = value?.toString() || "null";
+          if (str.length > 20) {
+            str = `${str.slice(0, 20)}... [size = ${str.length}]`;
+          }
+          return (
+            <td className="query-results-column" key={i}>
+              {str}
+            </td>
+          );
+        })}
       </tr>
     ));
   }, [values]);
