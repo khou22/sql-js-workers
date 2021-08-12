@@ -23,6 +23,9 @@ const WriterStatus = () => {
           <button onClick={() => start(1000, 1000)}>
             Start Writing 1000/1s
           </button>
+          <button onClick={() => start(1000, 10000)}>
+            Start Writing 1000/10s
+          </button>
           <button onClick={() => start(10000, 5000)}>
             Start Writing 10000/5s
           </button>
