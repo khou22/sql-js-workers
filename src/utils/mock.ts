@@ -7,7 +7,9 @@ export const generateRandomArray = (n: number): number[] =>
   Array.from({ length: n }, () => Math.floor(Math.random() * n));
 
 // Unmasked planner_viz is 430,000 bytes or so
-const MAX_PAYLOAD_SIZE = 500000;
+// Inconsistently running into OOM errors allocating buffer.
+// const MAX_PAYLOAD_SIZE = 500000;
+const MAX_PAYLOAD_SIZE = 100000;
 
 export const generateMockRowData = (n: number): RowData[] => {
   const mockData: RowData[] = [];

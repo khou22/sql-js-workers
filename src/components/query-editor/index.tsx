@@ -8,7 +8,9 @@ import { ResultsTable } from "./query-results";
 export const SqlQueryEditor = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [query, setQuery] = useState("select * from data;");
+  const [query, setQuery] = useState(
+    'SELECT tbl_name FROM sqlite_master WHERE type = "table";'
+  );
   const [queryDuration, setQueryDuration] = useState<number | null>(null);
   const [results, setResults] = useState<QueryExecResult[]>([]);
 
@@ -56,6 +58,7 @@ export const SqlQueryEditor = () => {
       <h4>Examples</h4>
       <ul>
         <ExampleQueryItem query="SELECT sqlite_version();" onClick={setQuery} />
+        <ExampleQueryItem query="PRAGMA journal_mode=WAL;" onClick={setQuery} />
         <ExampleQueryItem query="SELECT * FROM data_1;" onClick={setQuery} />
         <ExampleQueryItem
           query="SELECT * FROM data_2 WHERE name='apple';"
