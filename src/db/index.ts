@@ -1,4 +1,5 @@
 import { proxy, Remote, transfer, wrap } from "comlink";
+import { QueryExecResult } from "sql.js";
 import SqlDatabaseWorker, {
   SqlDatabaseWorkerAPI,
 } from "../workers/sql/index.shared-worker";
@@ -28,5 +29,14 @@ export class DatabaseOperator {
       numRows,
       proxy((totalRows) => console.log("Total rows", totalRows))
     );
+  };
+
+  exec = async (
+    sql: string
+  ): Promise<{ results: QueryExecResult[]; meta: { durationMS: number } }> => {
+    const startTime = performance.now();
+    const results = await this.workerAPI.exec(sql);
+    const endTime = performance.now();
+    return { results, meta: { durationMS: endTime - startTime } };
   };
 }

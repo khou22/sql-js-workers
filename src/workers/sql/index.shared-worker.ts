@@ -1,4 +1,14 @@
 import { expose } from "comlink";
+import { QueryExecResult } from "sql.js";
+import { SqlJsOperator } from "./sql-js";
+import { RowData } from "./types";
+
+const sqlOperator = new SqlJsOperator();
+sqlOperator.setup().then(() => {
+  sqlOperator.execSQL(
+    "CREATE TABLE data (id char, name char, payload LONGBLOB)"
+  );
+});
 
 var connections = 0;
 
@@ -11,9 +21,23 @@ const handleWriteRows = (
   onSuccess: (totalRows: number) => void
 ) => {
   console.log("[Writer] Writing", numRows);
+
+  const mockData: RowData[] = [];
+  for (let i = 0; i < numRows; i++) {
+    mockData.push({
+      id: `row-${totalRows + i}`,
+      name: `some-name-${i}`,
+      payload: 0x01ff,
+    });
+  }
+  sqlOperator.insertRows(mockData);
+
   totalRows += numRows;
   onSuccess(totalRows);
 };
+
+const handleRawSQL = (sql: string): Promise<QueryExecResult[]> =>
+  sqlOperator.execSQL(sql);
 
 const bindWriter = (writerID: string, port: MessagePort) => {
   console.log(`[DB] Binding writer ${writerID}`);
@@ -34,6 +58,7 @@ const api = {
   health: handleHealth,
   writeRows: handleWriteRows,
   bindWriter,
+  exec: handleRawSQL,
 };
 
 // @ts-ignore

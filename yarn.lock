@@ -1677,6 +1677,11 @@
   dependencies:
     "@babel/types" "^7.3.0"
 
+"@types/emscripten@*":
+  version "1.39.5"
+  resolved "https://registry.yarnpkg.com/@types/emscripten/-/emscripten-1.39.5.tgz#eb0fb1048301df980b6f8a5ec3d63f7d1572bb73"
+  integrity sha512-DIOOg+POSrYl+OlNRHQuIEqCd8DCtynG57H862UCce16nXJX7J8eWxNGgOcf8Eyge8zXeSs27mz1UcFu8L/L7g==
+
 "@types/eslint@^7.2.6":
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-7.2.6.tgz#5e9aff555a975596c03a98b59ecd103decc70c3c"
@@ -1832,6 +1837,14 @@
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@types/source-list-map/-/source-list-map-0.1.2.tgz#0078836063ffaf17412349bba364087e0ac02ec9"
   integrity sha512-K5K+yml8LTo9bWJI/rECfIPrGgxdpeNbj+d53lwN4QjW1MCwlkhUms+gtdzigTeUyBr09+u8BwOIY3MXvHdcsA==
+
+"@types/sql.js@^1.4.2":
+  version "1.4.2"
+  resolved "https://registry.yarnpkg.com/@types/sql.js/-/sql.js-1.4.2.tgz#7bf4f9ec12013f48d23d77f42fe0945b37ac8808"
+  integrity sha512-3Mq6KcJp+1qJ6FfE7c16oNZcgGrPiUZWj8DSePRRZQCPhi4vawX/thGCzwqIg59tOCjdQI1eMC+pLk9FLfTXwQ==
+  dependencies:
+    "@types/emscripten" "*"
+    "@types/node" "*"
 
 "@types/stack-utils@^2.0.0":
   version "2.0.0"
@@ -10060,6 +10073,11 @@ sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
+
+sql.js@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/sql.js/-/sql.js-1.5.0.tgz#6625c3e41115194f6bfab80a5e53647f1378c3fb"
+  integrity sha512-Qqr6HgX/hCDpLFWdN0BNoNpYQ2c1tOl1c3HGI0cshjaFSAWszKICuLZ9CyFUvRFPpEGW8RzHzwuXWWvXVGTKBg==
 
 sshpk@^1.7.0:
   version "1.16.1"
