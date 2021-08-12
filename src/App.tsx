@@ -38,6 +38,8 @@ const App = () => {
 
       <WriterStatus />
       <WriterStatus />
+      <WriterStatus />
+      <WriterStatus />
     </div>
   );
 };

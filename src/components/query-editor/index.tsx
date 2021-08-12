@@ -5,7 +5,7 @@ import { ResultsTable } from "./query-results";
 
 export const SqlQueryEditor = () => {
   const [error, setError] = useState<Error | null>(null);
-  const [query, setQuery] = useState<string>("");
+  const [query, setQuery] = useState("select * from data;");
   const [queryDuration, setQueryDuration] = useState<number | null>(null);
   const [results, setResults] = useState<QueryExecResult[]>([]);
 
@@ -32,6 +32,7 @@ export const SqlQueryEditor = () => {
           width: "calc(100% - 24px)",
           padding: 8,
         }}
+        value={query}
         onChange={(e) => setQuery(e.target.value)}
         placeholder="Enter some SQL. No inspiration ? Try “select sqlite_version()”"
       ></textarea>
