@@ -26,7 +26,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   return (
     <>
       <h3>
-        Query {queryID} (${values.length} rows)
+        Query {queryID} ({values.length} rows)
       </h3>
       <table style={{ width: "100%", textAlign: "left" }}>
         <thead>

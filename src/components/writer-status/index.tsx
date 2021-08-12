@@ -7,7 +7,11 @@ const WriterStatus = () => {
   return (
     <div style={{ border: "1px solid black", padding: 8, margin: 12 }}>
       <h2>Writer: {id}</h2>
-      <h6>{isWriting ? "Writing" : "Paused"}</h6>
+      <p>
+        {isWriting
+          ? "Writing 50 messages per second"
+          : "Click to write 50 messages per second"}
+      </p>
       {isWriting ? (
         <button onClick={stop}>Stop Writing</button>
       ) : (

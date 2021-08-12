@@ -1,6 +1,9 @@
 import { expose } from "comlink";
 import { DatabaseOperator } from "../../db";
 
+const WRITE_SIZE = 50;
+const TIMER = 1000;
+
 interface InternalState {
   id?: string;
   dbWorkerPort?: MessagePort;
@@ -29,8 +32,8 @@ const handleStart = () => {
       return;
     }
 
-    state.dbOperator?.writeRows(5);
-  }, 1000);
+    state.dbOperator?.writeRows(WRITE_SIZE);
+  }, TIMER);
 };
 
 const handleStop = () => {
