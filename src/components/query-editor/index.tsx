@@ -2,6 +2,7 @@ import { useCallback, useContext, useState } from "react";
 import { QueryExecResult } from "sql.js";
 import PerformanceContext from "../../context/performance";
 import { mainDatabaseOperator } from "../../db/mainOperator";
+import { ExampleQueryItem } from "./ExampleQuery";
 import { ResultsTable } from "./query-results";
 
 export const SqlQueryEditor = () => {
@@ -50,9 +51,16 @@ export const SqlQueryEditor = () => {
 
       <h4>Examples</h4>
       <ul>
-        <li>select sqlite_version();</li>
-        <li>select * from data;</li>
-        <li>select * from data where name='apple';</li>
+        <ExampleQueryItem query="SELECT sqlite_version();" onClick={setQuery} />
+        <ExampleQueryItem query="SELECT * FROM data;" onClick={setQuery} />
+        <ExampleQueryItem
+          query="SELECT * FROM data WHERE name='apple';"
+          onClick={setQuery}
+        />
+        <ExampleQueryItem
+          query={`SELECT tbl_name FROM sqlite_master WHERE type = "table";`}
+          onClick={setQuery}
+        />
       </ul>
 
       <pre className="error">{(error || "").toString()}</pre>

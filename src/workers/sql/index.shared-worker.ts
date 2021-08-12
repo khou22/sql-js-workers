@@ -2,12 +2,12 @@ import { expose } from "comlink";
 import { QueryExecResult } from "sql.js";
 import { SqlJsOperator } from "./sql-js";
 import { RowData } from "./types";
+import { getTableName, initializeTable } from "./utils";
 
 const sqlOperator = new SqlJsOperator();
-sqlOperator.setup().then(() => {
-  sqlOperator.execSQL(
-    "CREATE TABLE data (id char, timestamp double, name char, payload LONGBLOB)"
-  );
+
+sqlOperator.setup().then((sql) => {
+  initializeTable(sql, getTableName());
 });
 
 var connections = 0;

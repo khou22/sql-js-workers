@@ -1,5 +1,6 @@
 import initSqlJs, { Database, QueryExecResult, SqlJsStatic } from "sql.js";
 import { RowData } from "./types";
+import { getTableName } from "./utils";
 
 const SQL_JS_WASM =
   "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.wasm";
@@ -19,6 +20,7 @@ export class SqlJsOperator {
       locateFile: () => SQL_JS_WASM,
     });
     this.db = new this.sql.Database();
+    return this;
   };
 
   execSQL = (sql: string): Promise<QueryExecResult[]> => {
@@ -45,8 +47,9 @@ export class SqlJsOperator {
   };
 
   insertRows = (rows: RowData[]) => {
-    const insertStatement =
-      "INSERT INTO data (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)";
+    const tableName = getTableName();
+
+    const insertStatement = `INSERT INTO ${tableName} (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)`;
     rows.forEach((rowData) => {
       this.execStructuredQuery(insertStatement, {
         $id: rowData.id,
