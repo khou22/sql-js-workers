@@ -13,7 +13,7 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   values,
 }) => {
   const rowNodes = useMemo(() => {
-    const clippedValues = values.slice(0, 100);
+    const clippedValues = values.slice(0, 10);
     return clippedValues.map((row, i) => (
       <tr key={i}>
         {row?.map((value, i) => {

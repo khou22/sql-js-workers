@@ -4,17 +4,13 @@ import { SqlJsOperator } from "./sql-js";
 import { RowData } from "./types";
 
 const sqlOperator = new SqlJsOperator();
-sqlOperator.setup().then(() => {
-  sqlOperator.execSQL(
-    "CREATE TABLE data (id char, timestamp double, name char, payload LONGBLOB)"
-  );
-});
+sqlOperator.setup();
 
 var connections = 0;
 
 let totalRows = 0;
 
-const handleHealth = (): boolean => true;
+const handleHealth = (): boolean => sqlOperator.health();
 
 const handleWriteRows = (
   rows: RowData[],

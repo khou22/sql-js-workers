@@ -2,11 +2,15 @@ import { useCallback, useContext, useState } from "react";
 import { QueryExecResult } from "sql.js";
 import PerformanceContext from "../../context/performance";
 import { mainDatabaseOperator } from "../../db/mainOperator";
+import { ExampleQueryItem } from "./ExampleQuery";
 import { ResultsTable } from "./query-results";
 
 export const SqlQueryEditor = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
-  const [query, setQuery] = useState("select * from data;");
+  const [query, setQuery] = useState(
+    'SELECT tbl_name FROM sqlite_master WHERE type = "table";'
+  );
   const [queryDuration, setQueryDuration] = useState<number | null>(null);
   const [results, setResults] = useState<QueryExecResult[]>([]);
 
@@ -16,6 +20,7 @@ export const SqlQueryEditor = () => {
     async (sql) => {
       try {
         setResults([]);
+        setIsLoading(true);
         const { results, meta } = await mainDatabaseOperator.exec(sql);
         setResults(results); // an array of objects is returned
         logReadRanges([
@@ -23,8 +28,10 @@ export const SqlQueryEditor = () => {
         ]);
         setQueryDuration(meta.durationMS);
         setError(null);
+        setIsLoading(false);
       } catch (err) {
         // exec throws an error when the SQL statement is invalid
+        setIsLoading(false);
         setError(err);
         setQueryDuration(null);
         setResults([]);
@@ -50,12 +57,25 @@ export const SqlQueryEditor = () => {
 
       <h4>Examples</h4>
       <ul>
-        <li>select sqlite_version();</li>
-        <li>select * from data;</li>
-        <li>select * from data where name='apple';</li>
+        <ExampleQueryItem query="SELECT sqlite_version();" onClick={setQuery} />
+        <ExampleQueryItem query="PRAGMA journal_mode=WAL;" onClick={setQuery} />
+        <ExampleQueryItem query="SELECT * FROM data_1;" onClick={setQuery} />
+        <ExampleQueryItem
+          query="SELECT * FROM data_2 WHERE name='apple';"
+          onClick={setQuery}
+        />
+        <ExampleQueryItem
+          query="SELECT * FROM data_3 WHERE timestamp > 3200 AND timestamp < 3300;"
+          onClick={setQuery}
+        />
+        <ExampleQueryItem
+          query={`SELECT tbl_name FROM sqlite_master WHERE type = "table";`}
+          onClick={setQuery}
+        />
       </ul>
 
       <pre className="error">{(error || "").toString()}</pre>
+      {isLoading && <p>Loading...</p>}
 
       {queryDuration && (
         <>

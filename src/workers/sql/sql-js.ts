@@ -1,5 +1,6 @@
 import initSqlJs, { Database, QueryExecResult, SqlJsStatic } from "sql.js";
 import { RowData } from "./types";
+import { getTableName } from "./utils";
 
 const SQL_JS_WASM =
   "https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/sql-wasm.wasm";
@@ -7,11 +8,15 @@ const SQL_JS_WASM =
 export class SqlJsOperator {
   sql?: SqlJsStatic;
   db?: Database;
+  tables: Set<string>;
 
   constructor() {
     this.sql = undefined;
     this.db = undefined;
+    this.tables = new Set<string>();
   }
+
+  health = () => Boolean(this.db);
 
   setup = async () => {
     this.sql = await initSqlJs({
@@ -19,6 +24,16 @@ export class SqlJsOperator {
       locateFile: () => SQL_JS_WASM,
     });
     this.db = new this.sql.Database();
+    return this;
+  };
+
+  initializeTable = async (tableName: string) => {
+    if (this.tables.has(tableName)) return;
+
+    await this.execSQL(
+      `CREATE TABLE IF NOT EXISTS ${tableName} (id char, timestamp double, name char, payload LONGBLOB)`
+    );
+    this.tables.add(tableName);
   };
 
   execSQL = (sql: string): Promise<QueryExecResult[]> => {
@@ -44,11 +59,19 @@ export class SqlJsOperator {
     stmt.free();
   };
 
-  insertRows = (rows: RowData[]) => {
-    const insertStatement =
-      "INSERT INTO data (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)";
-    rows.forEach((rowData) => {
+  insertRows = async (rows: RowData[]) => {
+    rows.forEach(async (rowData) => {
+      // Determine table that this row should go into.
+      const tableName = getTableName(rowData);
+
+      // Possibly create table if doesn't exist.
+      await this.initializeTable(tableName);
+
+      const insertStatement = `INSERT INTO ${tableName} (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)`;
+
+      // Insert the row
       this.execStructuredQuery(insertStatement, {
+        $tableName: tableName,
         $id: rowData.id,
         $timestamp: rowData.timestamp,
         $name: rowData.name,
