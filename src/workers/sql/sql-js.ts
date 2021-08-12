@@ -8,11 +8,15 @@ const SQL_JS_WASM =
 export class SqlJsOperator {
   sql?: SqlJsStatic;
   db?: Database;
+  tables: Set<string>;
 
   constructor() {
     this.sql = undefined;
     this.db = undefined;
+    this.tables = new Set<string>();
   }
+
+  health = () => Boolean(this.db);
 
   setup = async () => {
     this.sql = await initSqlJs({
@@ -21,6 +25,15 @@ export class SqlJsOperator {
     });
     this.db = new this.sql.Database();
     return this;
+  };
+
+  initializeTable = async (tableName: string) => {
+    if (this.tables.has(tableName)) return;
+
+    await this.execSQL(
+      `CREATE TABLE IF NOT EXISTS ${tableName} (id char, timestamp double, name char, payload LONGBLOB)`
+    );
+    this.tables.add(tableName);
   };
 
   execSQL = (sql: string): Promise<QueryExecResult[]> => {
@@ -46,12 +59,19 @@ export class SqlJsOperator {
     stmt.free();
   };
 
-  insertRows = (rows: RowData[]) => {
-    const tableName = getTableName();
+  insertRows = async (rows: RowData[]) => {
+    rows.forEach(async (rowData) => {
+      // Determine table that this row should go into.
+      const tableName = getTableName(rowData);
 
-    const insertStatement = `INSERT INTO ${tableName} (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)`;
-    rows.forEach((rowData) => {
+      // Possibly create table if doesn't exist.
+      await this.initializeTable(tableName);
+
+      const insertStatement = `INSERT INTO ${tableName} (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)`;
+
+      // Insert the row
       this.execStructuredQuery(insertStatement, {
+        $tableName: tableName,
         $id: rowData.id,
         $timestamp: rowData.timestamp,
         $name: rowData.name,

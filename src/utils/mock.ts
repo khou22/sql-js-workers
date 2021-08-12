@@ -1,4 +1,5 @@
 import { RowData } from "../workers/sql/types";
+import { MIN_TIMESTAMP } from "../workers/sql/utils";
 
 const possibleNames = ["apple", "banana", "clementine", "dragonfruit"];
 
@@ -16,7 +17,7 @@ export const generateMockRowData = (n: number): RowData[] => {
   const mockPayload = new Uint8Array(generateRandomArray(payloadSize));
 
   for (let i = 0; i < n; i++) {
-    const timestamp = performance.now();
+    const timestamp = MIN_TIMESTAMP + performance.now();
     mockData.push({
       id: `${i}`,
       timestamp,

@@ -2,19 +2,15 @@ import { expose } from "comlink";
 import { QueryExecResult } from "sql.js";
 import { SqlJsOperator } from "./sql-js";
 import { RowData } from "./types";
-import { getTableName, initializeTable } from "./utils";
 
 const sqlOperator = new SqlJsOperator();
-
-sqlOperator.setup().then((sql) => {
-  initializeTable(sql, getTableName());
-});
+sqlOperator.setup();
 
 var connections = 0;
 
 let totalRows = 0;
 
-const handleHealth = (): boolean => true;
+const handleHealth = (): boolean => sqlOperator.health();
 
 const handleWriteRows = (
   rows: RowData[],
