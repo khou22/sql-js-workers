@@ -1,4 +1,5 @@
 import React, { useCallback } from "react";
+import TimelineRangeChart from "./components/performance-viz";
 import { SqlQueryEditor } from "./components/query-editor";
 import { StopWatch } from "./components/stopwatch";
 import WriterStatus from "./components/writer-status";
@@ -34,6 +35,11 @@ const App = () => {
       </p>
 
       <SqlQueryEditor />
+
+      <hr />
+
+      <h2>Performance</h2>
+      <TimelineRangeChart />
 
       <hr />
 

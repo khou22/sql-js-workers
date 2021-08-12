@@ -43,6 +43,7 @@ export const SqlQueryEditor = () => {
       <ul>
         <li>select sqlite_version();</li>
         <li>select * from data;</li>
+        <li>select * from data where name='apple';</li>
       </ul>
 
       <pre className="error">{(error || "").toString()}</pre>
