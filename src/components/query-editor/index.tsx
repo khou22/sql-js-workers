@@ -1,5 +1,6 @@
-import { useCallback, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { QueryExecResult } from "sql.js";
+import PerformanceContext from "../../context/performance";
 import { mainDatabaseOperator } from "../../db/mainOperator";
 import { ResultsTable } from "./query-results";
 
@@ -9,20 +10,26 @@ export const SqlQueryEditor = () => {
   const [queryDuration, setQueryDuration] = useState<number | null>(null);
   const [results, setResults] = useState<QueryExecResult[]>([]);
 
-  const exec = useCallback(async (sql) => {
-    try {
-      setResults([]);
-      const { results, meta } = await mainDatabaseOperator.exec(sql);
-      setResults(results); // an array of objects is returned
-      setQueryDuration(meta.durationMS);
-      setError(null);
-    } catch (err) {
-      // exec throws an error when the SQL statement is invalid
-      setError(err);
-      setQueryDuration(null);
-      setResults([]);
-    }
-  }, []);
+  const { logReadRanges } = useContext(PerformanceContext);
+
+  const exec = useCallback(
+    async (sql) => {
+      try {
+        setResults([]);
+        const { results, meta } = await mainDatabaseOperator.exec(sql);
+        setResults(results); // an array of objects is returned
+        logReadRanges([{ start: meta.start, end: meta.end }]);
+        setQueryDuration(meta.durationMS);
+        setError(null);
+      } catch (err) {
+        // exec throws an error when the SQL statement is invalid
+        setError(err);
+        setQueryDuration(null);
+        setResults([]);
+      }
+    },
+    [logReadRanges]
+  );
 
   return (
     <div style={{ margin: 12, marginBottom: 48 }}>

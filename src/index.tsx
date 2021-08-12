@@ -1,11 +1,14 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import { PerformanceContextManager } from "./context/performance";
 import reportWebVitals from "./reportWebVitals";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <PerformanceContextManager>
+      <App />
+    </PerformanceContextManager>
   </React.StrictMode>,
   document.getElementById("root")
 );

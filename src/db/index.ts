@@ -34,10 +34,20 @@ export class DatabaseOperator {
 
   exec = async (
     sql: string
-  ): Promise<{ results: QueryExecResult[]; meta: { durationMS: number } }> => {
+  ): Promise<{
+    results: QueryExecResult[];
+    meta: { start: number; end: number; durationMS: number };
+  }> => {
     const startTime = performance.now();
     const results = await this.workerAPI.exec(sql);
     const endTime = performance.now();
-    return { results, meta: { durationMS: endTime - startTime } };
+    return {
+      results,
+      meta: {
+        start: startTime,
+        end: endTime,
+        durationMS: endTime - startTime,
+      },
+    };
   };
 }
