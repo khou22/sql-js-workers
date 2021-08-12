@@ -18,7 +18,9 @@ export const SqlQueryEditor = () => {
         setResults([]);
         const { results, meta } = await mainDatabaseOperator.exec(sql);
         setResults(results); // an array of objects is returned
-        logReadRanges([{ start: meta.start, end: meta.end }]);
+        logReadRanges([
+          { source: "query-editor", start: meta.start, end: meta.end },
+        ]);
         setQueryDuration(meta.durationMS);
         setError(null);
       } catch (err) {

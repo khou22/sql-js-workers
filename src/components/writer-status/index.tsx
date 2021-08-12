@@ -24,7 +24,7 @@ const WriterStatus = () => {
             Start Writing 1000/1s
           </button>
           <button onClick={() => start(10000, 5000)}>
-            Start Writing 10000/1s
+            Start Writing 10000/5s
           </button>
         </>
       )}

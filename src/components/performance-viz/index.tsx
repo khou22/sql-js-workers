@@ -31,19 +31,26 @@ const ChartOptions: ApexCharts.ApexOptions = {
 };
 
 const TimelineRangeChart: React.FC = () => {
-  const { reads } = useContext(PerformanceContext);
+  const { reads, writes } = useContext(PerformanceContext);
 
   const data = useMemo(() => {
     return [
       {
         name: "reads",
         data: reads.map((readRange) => ({
-          x: "query-editor",
+          x: readRange.source,
           y: [readRange.start, readRange.end],
         })),
       },
+      {
+        name: "writes",
+        data: writes.map((writeRange) => ({
+          x: writeRange.source,
+          y: [writeRange.start, writeRange.end],
+        })),
+      },
     ];
-  }, [reads]);
+  }, [reads, writes]);
 
   return (
     <div id="chart">

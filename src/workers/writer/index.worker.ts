@@ -10,6 +10,9 @@ interface InternalState {
   dbWorkerPort?: MessagePort;
   currentTimer?: NodeJS.Timeout;
   dbOperator?: DatabaseOperator;
+
+  // Performance meta
+  logWrite?: (start: number, end: number) => void;
 }
 
 let state: InternalState = {
@@ -35,7 +38,10 @@ const handleStart = (numMessages?: number, interval?: number) => {
 
     const mockData = generateMockRowData(numMessages || DEFAULT_WRITE_SIZE);
 
-    state.dbOperator?.writeRows(mockData);
+    const start = Date.now();
+    state.dbOperator?.writeRows(mockData, () => {
+      if (state.logWrite) state.logWrite(start, Date.now());
+    });
   }, interval || DEFAULT_INTERVAL_TIMER);
 };
 
@@ -47,10 +53,17 @@ const handleStop = () => {
   }
 };
 
+const handleSetPerformanceLog = (
+  logWrite: (start: number, end: number) => void
+) => {
+  state.logWrite = logWrite;
+};
+
 const api = {
   init,
   start: handleStart,
   stop: handleStop,
+  handleSetPerformanceLog,
 };
 
 export default {} as typeof Worker & { new (): Worker };

@@ -1,13 +1,16 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import TimelineRangeChart from "./components/performance-viz";
 import { SqlQueryEditor } from "./components/query-editor";
 import { StopWatch } from "./components/stopwatch";
 import WriterStatus from "./components/writer-status";
+import PerformanceContext from "./context/performance";
 import { mainDatabaseOperator } from "./db/mainOperator";
 import "./index.css";
 import { generateMockRowData } from "./utils/mock";
 
 const App = () => {
+  const { logWriteRanges } = useContext(PerformanceContext);
+
   const handleHealth = useCallback(async () => {
     const isHealthy = await mainDatabaseOperator.checkHealth();
     if (isHealthy) {
@@ -17,10 +20,16 @@ const App = () => {
     }
   }, []);
 
-  const handleAddRows = useCallback(async (n: number) => {
-    const mockData = generateMockRowData(n);
-    mainDatabaseOperator.writeRows(mockData);
-  }, []);
+  const handleAddRows = useCallback(
+    async (n: number) => {
+      const start = Date.now();
+      const mockData = generateMockRowData(n);
+      mainDatabaseOperator.writeRows(mockData);
+
+      logWriteRanges([{ start, end: Date.now(), source: "manual" }]);
+    },
+    [logWriteRanges]
+  );
 
   return (
     <div className="App">

@@ -25,10 +25,10 @@ export class DatabaseOperator {
     this.workerAPI.bindWriter(id, transfer(port, [port]));
   };
 
-  writeRows = (rows: RowData[]) => {
+  writeRows = (rows: RowData[], onComplete?: (totalRows: number) => void) => {
     this.workerAPI.writeRows(
       rows,
-      proxy((totalRows) => console.log("Total rows", totalRows))
+      proxy((totalRows) => onComplete && onComplete(totalRows))
     );
   };
 
@@ -38,9 +38,9 @@ export class DatabaseOperator {
     results: QueryExecResult[];
     meta: { start: number; end: number; durationMS: number };
   }> => {
-    const startTime = performance.now();
+    const startTime = Date.now();
     const results = await this.workerAPI.exec(sql);
-    const endTime = performance.now();
+    const endTime = Date.now();
     return {
       results,
       meta: {
