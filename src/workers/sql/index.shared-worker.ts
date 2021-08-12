@@ -26,7 +26,7 @@ const handleWriteRows = (
   for (let i = 0; i < numRows; i++) {
     mockData.push({
       id: `row-${totalRows + i}`,
-      timestamp: i * 1000,
+      timestamp: performance.now(),
       name: `some-name-${i}`,
       payload: 0x01ff,
     });

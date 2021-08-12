@@ -1,8 +1,8 @@
 import { expose } from "comlink";
 import { DatabaseOperator } from "../../db";
 
-const WRITE_SIZE = 50;
-const TIMER = 1000;
+const DEFAULT_WRITE_SIZE = 100;
+const DEFAULT_INTERVAL_TIMER = 1000;
 
 interface InternalState {
   id?: string;
@@ -23,7 +23,7 @@ const init = (id: string, dbWorkerPort: MessagePort) => {
   state.dbOperator = new DatabaseOperator(state.dbWorkerPort);
 };
 
-const handleStart = () => {
+const handleStart = (numMessages?: number, interval?: number) => {
   console.log(`[Writer ${state.id}] Starting`);
 
   state.currentTimer = setInterval(async () => {
@@ -32,8 +32,8 @@ const handleStart = () => {
       return;
     }
 
-    state.dbOperator?.writeRows(WRITE_SIZE);
-  }, TIMER);
+    state.dbOperator?.writeRows(numMessages || DEFAULT_WRITE_SIZE);
+  }, interval || DEFAULT_INTERVAL_TIMER);
 };
 
 const handleStop = () => {

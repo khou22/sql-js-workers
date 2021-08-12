@@ -11,6 +11,7 @@ export const SqlQueryEditor = () => {
 
   const exec = useCallback(async (sql) => {
     try {
+      setResults([]);
       const { results, meta } = await mainDatabaseOperator.exec(sql);
       setResults(results); // an array of objects is returned
       setQueryDuration(meta.durationMS);
