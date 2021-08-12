@@ -41,17 +41,16 @@ export class SqlJsOperator {
 
     // Bind values to the parameters and fetch the results of the query
     const result = stmt.getAsObject(params);
-
-    stmt.run();
     stmt.free();
   };
 
   insertRows = (rows: RowData[]) => {
     const insertStatement =
-      "INSERT INTO data (id, name, payload) VALUES ($id, $name, $payload)";
+      "INSERT INTO data (id, timestamp, name, payload) VALUES ($id, $timestamp, $name, $payload)";
     rows.forEach((rowData) => {
       this.execStructuredQuery(insertStatement, {
         $id: rowData.id,
+        $timestamp: rowData.timestamp,
         $name: rowData.name,
         $payload: rowData.payload,
       });

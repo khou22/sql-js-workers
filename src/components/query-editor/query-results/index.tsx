@@ -2,11 +2,13 @@ import { useMemo } from "react";
 import { SqlValue } from "sql.js";
 
 type ResultsTableProps = {
+  queryID: number;
   columns: string[];
   values: SqlValue[][];
 };
 
 export const ResultsTable: React.FC<ResultsTableProps> = ({
+  queryID,
   columns,
   values,
 }) => {
@@ -22,18 +24,28 @@ export const ResultsTable: React.FC<ResultsTableProps> = ({
   }, [values]);
 
   return (
-    <table>
-      <thead>
-        <tr>
-          {columns.map((columnName, i) => (
-            <td key={i}>{columnName}</td>
-          ))}
-        </tr>
-      </thead>
+    <>
+      <h3>
+        Query {queryID} (${values.length} rows)
+      </h3>
+      <table style={{ width: "100%", textAlign: "left" }}>
+        <thead>
+          <tr>
+            {columns.map((columnName, i) => (
+              <th key={i}>{columnName}</th>
+            ))}
+          </tr>
+        </thead>
 
-      <tbody>{rowNodes}</tbody>
+        <tbody>{rowNodes}</tbody>
 
-      <tfoot>{values.length} Results</tfoot>
-    </table>
+        <tfoot>
+          <tr>
+            <th scope="row">Total rows</th>
+            <td>{values.length}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </>
   );
 };

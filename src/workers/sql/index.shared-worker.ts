@@ -6,7 +6,7 @@ import { RowData } from "./types";
 const sqlOperator = new SqlJsOperator();
 sqlOperator.setup().then(() => {
   sqlOperator.execSQL(
-    "CREATE TABLE data (id char, name char, payload LONGBLOB)"
+    "CREATE TABLE data (id char, timestamp double, name char, payload LONGBLOB)"
   );
 });
 
@@ -26,6 +26,7 @@ const handleWriteRows = (
   for (let i = 0; i < numRows; i++) {
     mockData.push({
       id: `row-${totalRows + i}`,
+      timestamp: i * 1000,
       name: `some-name-${i}`,
       payload: 0x01ff,
     });

@@ -48,12 +48,17 @@ export const SqlQueryEditor = () => {
       {queryDuration && (
         <>
           <h2>Results</h2>
-          <i>Duration: {queryDuration} MS</i>
+          <i>Duration: {queryDuration.toFixed(1)} MS</i>
           <pre>
             {
               // results contains one object per select statement in the query
               results.map(({ columns, values }, i) => (
-                <ResultsTable key={i} columns={columns} values={values} />
+                <ResultsTable
+                  key={i}
+                  queryID={i}
+                  columns={columns}
+                  values={values}
+                />
               ))
             }
           </pre>
