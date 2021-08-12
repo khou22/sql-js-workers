@@ -22,7 +22,7 @@ const ChartOptions: ApexCharts.ApexOptions = {
   },
   fill: {
     type: "solid",
-    opacity: 0.6,
+    opacity: 0.15,
   },
   legend: {
     position: "top",
