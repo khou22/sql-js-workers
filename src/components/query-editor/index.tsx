@@ -56,9 +56,9 @@ export const SqlQueryEditor = () => {
       <h4>Examples</h4>
       <ul>
         <ExampleQueryItem query="SELECT sqlite_version();" onClick={setQuery} />
-        <ExampleQueryItem query="SELECT * FROM data;" onClick={setQuery} />
+        <ExampleQueryItem query="SELECT * FROM data_1;" onClick={setQuery} />
         <ExampleQueryItem
-          query="SELECT * FROM data WHERE name='apple';"
+          query="SELECT * FROM data_2 WHERE name='apple';"
           onClick={setQuery}
         />
         <ExampleQueryItem
