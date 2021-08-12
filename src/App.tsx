@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import TimelineRangeChart from "./components/performance-viz";
 import { SqlQueryEditor } from "./components/query-editor";
 import { StopWatch } from "./components/stopwatch";
@@ -10,6 +10,7 @@ import { generateMockRowData } from "./utils/mock";
 
 const App = () => {
   const { logWriteRanges } = useContext(PerformanceContext);
+  const [showPerformance, setShowPerformance] = useState(false);
 
   const handleHealth = useCallback(async () => {
     const isHealthy = await mainDatabaseOperator.checkHealth();
@@ -48,7 +49,10 @@ const App = () => {
       <hr />
 
       <h2>Performance</h2>
-      <TimelineRangeChart />
+      <button onClick={() => setShowPerformance((prev) => !prev)}>
+        {showPerformance ? "Hide" : "Show"}
+      </button>
+      {showPerformance && <TimelineRangeChart />}
 
       <hr />
 
